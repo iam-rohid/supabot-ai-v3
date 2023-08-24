@@ -11,14 +11,43 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { ChevronsUpDown, Home, LogOut, Settings, User } from "lucide-react";
+import {
+  ChevronsUpDown,
+  Computer,
+  ExternalLink,
+  Home,
+  LogOut,
+  Settings,
+  User,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import Link from "next/link";
+import { useTheme } from "next-themes";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
+import { ReactNode } from "react";
+import { Label } from "./ui/label";
+import { APP_NAME } from "@/lib/constants";
+
+const themes: Record<string, { label: string; icon: ReactNode }> = {
+  system: {
+    label: "System",
+    icon: <Computer size={16} />,
+  },
+  light: {
+    label: "Light",
+    icon: <Computer size={16} />,
+  },
+  dark: {
+    label: "Dark",
+    icon: <Computer size={16} />,
+  },
+};
 
 export default function SideBarUserButton() {
   const { isLoaded, user } = useUser();
   const { isLoaded: sessionLoaded, session: activeSession } = useSession();
   const { signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
 
   if (!(isLoaded && user && sessionLoaded)) {
     return <Skeleton className="w-full h-[50px]" />;
@@ -49,34 +78,55 @@ export default function SideBarUserButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-56">
-        <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/settings/account">
-              <User className="mr-2 w-4 h-4" />
-              View Profile
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/settings/account#/profile">
-              <Settings className="mr-2 w-4 h-4" />
-              Settings
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
+        <div className="p-2">
+          <p className="font-medium">{user.fullName}</p>
+          <p className="text-sm text-muted-foreground">
+            {user.primaryEmailAddress?.emailAddress}
+          </p>
+        </div>
+
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard">Dashboard</Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/settings/account">Settings</Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator />
+
+        <div className="flex items-center justify-between gap-2 py-1 pl-2">
+          <Label htmlFor="theme-switcher" className="flex-1 truncate">
+            Theme
+          </Label>
+          <Select value={theme} onValueChange={(value) => setTheme(value)}>
+            <SelectTrigger id="theme-switcher" className="w-fit gap-2">
+              {theme && (
+                <>
+                  {themes[theme].icon}
+                  {themes[theme].label}
+                </>
+              )}
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="system">System</SelectItem>
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link href="/home">
-            <Home className="mr-2 w-4 h-4" />
-            Home Page
+          <Link href="/home" target="_blank">
+            <p className="flex-1 truncate">{APP_NAME} Homepage</p>
+            <ExternalLink size={16} />
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => signOut({ sessionId: activeSession?.id })}
         >
-          <LogOut className="mr-2 w-4 h-4" />
           Log Out
         </DropdownMenuItem>
       </DropdownMenuContent>

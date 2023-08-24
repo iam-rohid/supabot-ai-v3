@@ -24,6 +24,7 @@ import { useState } from "react";
 export default function ChatbotSwitcher({
   currentChatbot,
   chatbots,
+  className,
 }: {
   currentChatbot: {
     id: string;
@@ -32,95 +33,91 @@ export default function ChatbotSwitcher({
     image?: string | null;
   };
   chatbots: { id: string; slug: string; name: string; image?: string | null }[];
+  className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
   return (
-    <div>
-      <p className="pl-4 text-xs text-muted-foreground pb-1 uppercase">
-        Chatbot
-      </p>
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            className="justify-start text-left w-full"
-          >
-            <Avatar className="w-6 h-6 mr-2 -ml-1">
-              {currentChatbot?.image && (
-                <AvatarImage src={currentChatbot.image} />
-              )}
-              <AvatarFallback>
-                <Image
-                  src={`/api/avatar?seed=${currentChatbot.id}&initials=${currentChatbot.slug}&size=128`}
-                  width={128}
-                  height={128}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 truncate">{currentChatbot.name}</div>
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent align="start" className="w-56 p-0">
-          <Command>
-            <CommandInput placeholder="Search chatbot..." />
-            <CommandEmpty>No chatbot found.</CommandEmpty>
-            <CommandGroup>
-              {chatbots.map((chatbot) => (
-                <CommandItem
-                  key={chatbot.slug}
-                  onSelect={() => {
-                    router.push(`/dashboard/chatbots/${chatbot.slug}`);
-                    setOpen(false);
-                  }}
-                >
-                  <Avatar className="w-6 h-6 mr-2 -ml-1">
-                    {chatbot?.image && <AvatarImage src={chatbot?.image} />}
-                    <AvatarFallback>
-                      <Image
-                        src={`/api/avatar?seed=${chatbot.id}&initials=${chatbot.slug}&size=128`}
-                        width={128}
-                        height={128}
-                        alt=""
-                        className="w-full h-full object-cover"
-                      />
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 truncate">
-                    <p className="sr-only">{chatbot.slug}</p>
-                    {chatbot.name}
-                  </div>
-                  <Check
-                    className={cn(
-                      "ml-2 h-4 w-4",
-                      currentChatbot.slug === chatbot.slug
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          className={cn("justify-start text-left", className)}
+        >
+          <Avatar className="w-6 h-6 mr-2 -ml-1">
+            {currentChatbot?.image && (
+              <AvatarImage src={currentChatbot.image} />
+            )}
+            <AvatarFallback>
+              <Image
+                src={`/api/avatar?seed=${currentChatbot.id}&initials=${currentChatbot.slug}&size=128`}
+                width={128}
+                height={128}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 truncate">{currentChatbot.name}</div>
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-56 p-0">
+        <Command>
+          <CommandInput placeholder="Search chatbot..." />
+          <CommandEmpty>No chatbot found.</CommandEmpty>
+          <CommandGroup>
+            {chatbots.map((chatbot) => (
               <CommandItem
+                key={chatbot.slug}
                 onSelect={() => {
-                  console.log("hello");
-                  router.push("/dashboard/chatbots/new");
+                  router.push(`/dashboard/chatbots/${chatbot.slug}`);
+                  setOpen(false);
                 }}
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Create Chatbot
+                <Avatar className="w-6 h-6 mr-2 -ml-1">
+                  {chatbot?.image && <AvatarImage src={chatbot?.image} />}
+                  <AvatarFallback>
+                    <Image
+                      src={`/api/avatar?seed=${chatbot.id}&initials=${chatbot.slug}&size=128`}
+                      width={128}
+                      height={128}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex-1 truncate">
+                  <p className="sr-only">{chatbot.slug}</p>
+                  {chatbot.name}
+                </div>
+                <Check
+                  className={cn(
+                    "ml-2 h-4 w-4",
+                    currentChatbot.slug === chatbot.slug
+                      ? "opacity-100"
+                      : "opacity-0"
+                  )}
+                />
               </CommandItem>
-            </CommandGroup>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+            ))}
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup>
+            <CommandItem
+              onSelect={() => {
+                console.log("hello");
+                router.push("/dashboard/chatbots/new");
+              }}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create Chatbot
+            </CommandItem>
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 }

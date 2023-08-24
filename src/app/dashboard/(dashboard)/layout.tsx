@@ -3,7 +3,7 @@ import { CreditCard, LayoutGrid, Settings } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode } from "react";
-import OrganizationSwitcher from "./organization-switcher";
+import OrganizationSwitcher from "@/components/organization-switcher";
 import SidebarNav from "@/components/sidebar-nav";
 import SideBarUserButton from "@/components/sidebar-user-button";
 
@@ -23,7 +23,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           </Link>
         </header>
         <div className="p-4">
-          <OrganizationSwitcher />
+          <p className="pl-4 text-xs text-muted-foreground pb-1 uppercase">
+            organization
+          </p>
+          <OrganizationSwitcher className="w-full" />
         </div>
         <SidebarNav
           list={[

@@ -1,5 +1,6 @@
+import OrganizationSwitcher from "@/components/organization-switcher";
 import { APP_NAME } from "@/lib/constants";
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import React, { ReactNode } from "react";
@@ -18,14 +19,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               className="w-12 h-12 object-contain"
             />
           </Link>
-          <OrganizationSwitcher
-            appearance={{
-              elements: {
-                rootBox: { display: "flex" },
-              },
-            }}
-            hidePersonal
-          />
+          <OrganizationSwitcher />
           <div className="flex-1"></div>
           <UserButton />
         </div>

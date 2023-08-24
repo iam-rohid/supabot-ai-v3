@@ -1,3 +1,4 @@
+import PageHeader from "@/components/page-header";
 import { prisma } from "@/lib/prisma";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -17,11 +18,8 @@ export default async function Page({
 
   return (
     <main className="container space-y-8 py-8">
-      <header className="py-4 flex items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-semibold">Overview</h1>
-        </div>
-      </header>
+      <PageHeader title="Overview" />
+
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-card text-card-foreground border p-4 rounded-lg shadow-sm">
           <h3 className="text-muted-foreground">Total Links</h3>

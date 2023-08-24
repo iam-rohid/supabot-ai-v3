@@ -1,5 +1,4 @@
 import {
-  CreditCard,
   FileText,
   LayoutGrid,
   LinkIcon,
@@ -107,7 +106,14 @@ export default async function Layout({
           </Link>
         </header>
         <div className="p-4">
-          <ChatbotSwitcher currentChatbot={chatbot} chatbots={chatbots} />
+          <p className="pl-4 text-xs text-muted-foreground pb-1 uppercase">
+            Chatbot
+          </p>
+          <ChatbotSwitcher
+            className="w-full"
+            currentChatbot={chatbot}
+            chatbots={chatbots}
+          />
         </div>
         <SidebarNav list={list} />
         <div className="p-4">
